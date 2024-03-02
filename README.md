@@ -1,5 +1,6 @@
 # Deletion
-A simple command line based project to delete files from a given directory by either searching for a given extension, or substring.\
+A simple command line based project to delete files from a given directory by either searching for a given extension, or substring\
+This program will not delete any folders\
 A user may optionally use -r to search recursively so as to include subdirectories\
 A user may optionally use -t to check what files are flagged for deletion, without actually deleting any files\
 To use:\
