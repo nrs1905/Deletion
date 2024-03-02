@@ -49,6 +49,8 @@ namespace Deletion
                         printHelp();
                         return;
                     }
+                    recursive = true;
+                    test = true;
                 }
                 else if (len == 4)
                 {
@@ -114,7 +116,10 @@ namespace Deletion
         static private void searchStart(string path, string sub)
         {
             search(path, sub);
-            Console.WriteLine("done. " + fcount + " files deleted");
+            if (test)
+                Console.WriteLine("No files were deleted. You are in test mode");
+            else
+                Console.WriteLine("done. " + fcount + " files deleted");
         }
         /*
          * search
