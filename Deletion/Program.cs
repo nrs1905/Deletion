@@ -13,7 +13,7 @@ namespace Deletion
     class Program
     {
         //help is the help message to print whenever there is an invalid argument
-        static string help = "Usage: del [-e][-s] [-r?] [-t?] < path > < Extension/Name >" + Environment.NewLine +
+        static string help = "Usage: Deletion [-e][-s] [-r?] [-t?] < path > < Extension/Name >" + Environment.NewLine +
             "Delete FILES with the speicfied extension, or containingg the given substring." + Environment.NewLine +
             "You MUST specify one of the parameters, -e or -s" + Environment.NewLine +
             "-e\tLook for extension to remove" + Environment.NewLine +
