@@ -8,7 +8,7 @@ using System.Threading;
 // Author: Nathaniel Shah
 
 namespace Deletion
-{
+{ 
     class Program
     {
         //help is the help message to print whenever there is an invalid argument
