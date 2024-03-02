@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
@@ -12,16 +13,18 @@ namespace Deletion
     class Program
     {
         //help is the help message to print whenever there is an invalid argument
-        static string help = "Usage: del [-e][-s] [-r] < path > < Extension/Name >\r\n" +
-            "Delete FILES with the speicfied extension, or containingg the given substring.\r\n\n" +
-            "You MUST specify one of the parameters, -e or -s\r\n" +
-            "-e\tLook for extension to remove\r\n" +
-            "-s\tRun in parallel mode (uses all available processors)\r\n" +
-            "-r\t(Optional) Run the program recursively to include all subdirectories\r\n" + 
-            "Reminder: Extension names require a '.' before hand. ex. '.png'\n";
+        static string help = "Usage: del [-e][-s] [-r?] [-t?] < path > < Extension/Name >" + Environment.NewLine +
+            "Delete FILES with the speicfied extension, or containingg the given substring." + Environment.NewLine +
+            "You MUST specify one of the parameters, -e or -s" + Environment.NewLine +
+            "-e\tLook for extension to remove" + Environment.NewLine +
+            "-s\tRun in parallel mode (uses all available processors)" + Environment.NewLine +
+            "-r\t(Optional) Run the program recursively to include all subdirectories" + Environment.NewLine +
+            "-t\t(Optional) Run the program in test mode to see what files are flagged by the program for deletion" + Environment.NewLine + 
+            "Reminder: Extension names require a '.' before hand. ex. '.png'" + Environment.NewLine;
         static int fcount = 0;
         static bool recursive = false;
         static bool ext = false;
+        static bool test = false;
         static void Main(string[] args)
         {
             bool exists; //whether the provided directory exists
@@ -30,17 +33,43 @@ namespace Deletion
             string sub;
             try
             {
+                var len = args.Length;
                 use = args[0];
-                if (args[1] != "-r") {
-                    path = args[1];
-                sub = args[2];
+                string rec;
+                string tes;
+                string unknown;
+                if (len == 5)
+                {
+                    rec = args[1];
+                    tes = args[2];
+                    path = args[3];
+                    sub = args[4];
+                    if (rec != "-r" | tes != "-t")
+                    {
+                        printHelp();
+                        return;
+                    }
+                }
+                else if (len == 4)
+                {
+                    unknown = args[1];
+                    path = args[2];
+                    sub = args[3];
+                    if (unknown == "-r")
+                        recursive = true;
+                    else if (unknown == "-t")
+                        test = true;
+                    else
+                    {
+                        printHelp();
+                        return;
+                    }
                 }
                 else
                 {
-                    recursive = true;
-                    path = args[2];
-                    sub = args[3];
-                }    
+                    path = args[1];
+                    sub = args[2];
+                } 
                 exists = Directory.Exists(path); //Check if the directory exists
             }
             //If there is any issue with accessing the path, print the help message then exit gracefully
@@ -60,11 +89,11 @@ namespace Deletion
             }
             if (!exists)
             {
-                Console.WriteLine("The path '"+ path +"' is invalid\n");
+                Console.WriteLine("The path '"+ path +"' is invalid" + Environment.NewLine);
                 printHelp();
                 return;
             }
-            Console.WriteLine("Directory '" + path + "':\n");
+            Console.WriteLine("Directory '" + path + "':" + Environment.NewLine);
             searchStart(path, sub);
         }
         /*
@@ -106,7 +135,7 @@ namespace Deletion
                     }
                     catch
                     {
-                        Console.WriteLine("Folder " + folder + " could not be loaded. Skipped from search\n");
+                        Console.WriteLine("Folder " + folder + " could not be loaded. Skipped from search" + Environment.NewLine);
                     }
                 }
                 );
@@ -124,21 +153,23 @@ namespace Deletion
                             {
                                 // Atomic increment
                                 Interlocked.Increment(ref fcount);
-                                File.Delete(file);
+                                if (!test)
+                                    File.Delete(file);
                                 Console.WriteLine(file);
                             }
                         }
                         else if (Path.GetFileName(file).Contains(sub))
                         {
                             Interlocked.Increment(ref fcount);
-                            File.Delete(file);
+                            if (!test)
+                                File.Delete(file);
                             Console.WriteLine(file);
                         }
                     }
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("File " + file + " could not be deleted. Skipped.\n");
+                    Console.WriteLine("File " + file + " could not be deleted. Skipped." + Environment.NewLine);
                 }
             }
             );
