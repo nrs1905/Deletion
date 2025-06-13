@@ -17,7 +17,7 @@ namespace Deletion
             "Delete FILES with the speicfied extension, or containingg the given substring." + Environment.NewLine +
             "You MUST specify one of the parameters, -e or -s" + Environment.NewLine +
             "-e\tLook for extension to remove" + Environment.NewLine +
-            "-s\tRun in parallel mode (uses all available processors)" + Environment.NewLine +
+            "-s\tLook for a substring to remove" + Environment.NewLine +
             "-r\t(Optional) Run the program recursively to include all subdirectories" + Environment.NewLine +
             "-t\t(Optional) Run the program in test mode to see what files are flagged by the program for deletion" + Environment.NewLine + 
             "Reminder: Extension names require a '.' before hand. ex. '.png'" + Environment.NewLine;
